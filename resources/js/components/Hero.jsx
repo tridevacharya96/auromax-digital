@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 
-const TYPING_WORDS = ['Amazing', 'Beautiful', 'Powerful', 'Modern', 'Stunning'];
+const TYPING_WORDS = ['Converge.', 'Connect.', 'Inspire.', 'Innovate.', 'Transform.'];
 
 function useCountUp(target, duration = 2000, start = false) {
     const [value, setValue] = useState(0);
@@ -39,9 +39,9 @@ function StatItem({ target, label }) {
 }
 
 export default function Hero() {
-    const [typedWord, setTypedWord] = useState('Amazing');
+    const [typedWord, setTypedWord] = useState('Converge.');
     const wordRef = useRef(0);
-    const charRef = useRef(7);
+    const charRef = useRef(9);
     const deletingRef = useRef(false);
     const timerRef = useRef(null);
 
@@ -80,14 +80,16 @@ export default function Hero() {
             <div className="hero-content">
                 <div className="hero-badge">
                     <span className="dot" />
-                    Now Available — Version 2.0
+                    Where Business Meets Innovation
                 </div>
-                <h1 style={{ color: '#2a2a2a', fontWeight: 900 }}>
-                    Build Something <span className="gradient-text">{typedWord}</span> Today
+                <h1 style={{ color: '#b85c00', fontWeight: 900 }}>
+                    Where Business, Entertainment &amp; Technology{' '}
+                    <span className="gradient-text">{typedWord}</span>
                 </h1>
-                <p style={{ color: '#555555' }}>
-                    A powerful, modern digital experience crafted with Laravel & React.
-                    Fast, responsive, and beautifully designed for Auromax Digital.
+                <p style={{ color: '#8a4a00', fontSize: '1.15rem', maxWidth: '780px', margin: '0 auto 2.5rem', lineHeight: '1.8' }}>
+                    Auromax Digital blends <strong style={{ color: '#cc4400' }}>commerce, creativity, and technology</strong> into
+                    one powerful platform — offering digital and physical products, celebrity-driven experiences,
+                    and custom web solutions that help brands and audiences connect like never before.
                 </p>
                 <div className="hero-buttons">
                     <button className="btn btn-primary" onClick={() => scrollTo('features')}>
