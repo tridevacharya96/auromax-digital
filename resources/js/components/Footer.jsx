@@ -6,7 +6,10 @@ export default function Footer() {
             <div className="footer-grid">
                 <div className="footer-brand">
                     <a href="#" className="logo"><img src="/images/amd-logo.png" alt="Auromax Digital" /></a>
-                    <p>A powerful modern digital experience built with Laravel & React. Fast, responsive, and beautifully designed for Auromax Digital.</p>
+                    <p style={{ color: '#e8e8e8', lineHeight: '1.8', marginTop: '1rem' }}>
+                        Elevating digital experiences through innovation,
+                        creativity, and meaningful connections.
+                    </p>
                     <div className="footer-socials">
                         <a href="#"><i className="fab fa-twitter" /></a>
                         <a href="#"><i className="fab fa-github" /></a>
@@ -19,7 +22,18 @@ export default function Footer() {
                 <div className="footer-col"><h4>Legal</h4><ul><li><a href="#">Privacy Policy</a></li><li><a href="#">Terms of Service</a></li><li><a href="#">Cookie Policy</a></li><li><a href="#">Licenses</a></li></ul></div>
             </div>
             <div className="footer-bottom">
-                <p>© {year} Auromax Digital. Made with <span>♥</span> by the AMD Team.</p>
+                <p>
+                    <span style={{
+                        background: 'linear-gradient(135deg, #cc0000, #f5a800)',
+                        WebkitBackgroundClip: 'text',
+                        WebkitTextFillColor: 'transparent',
+                        backgroundClip: 'text',
+                        fontWeight: 700,
+                    }}>
+                        © {year} Auromax Digital. All rights reserved.
+                    </span>
+                    {' '}Made with <span style={{ color: '#cc0000' }}>♥</span> by the AMD Team.
+                </p>
                 <div className="footer-bottom-links"><a href="#">Privacy</a><a href="#">Terms</a><a href="#">Cookies</a></div>
             </div>
         </footer>

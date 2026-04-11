@@ -533,3 +533,73 @@ footer {
 
 /* ===== FOOTER LOGO BIGGER ===== */
 .footer-brand .logo img { height: 95px !important; max-width: 280px !important; }
+
+/* ===== FOOTER CONSISTENT COLORS ===== */
+footer { color: #f5a800 !important; }
+footer p { color: #f5a800 !important; }
+.footer-brand p { color: #f5a800 !important; }
+.footer-col h4 { color: #f5a800 !important; }
+.footer-col ul a { color: #f5a800 !important; }
+.footer-col ul a:hover { color: #ffffff !important; }
+.footer-bottom p { color: #f5a800 !important; }
+.footer-bottom-links a { color: #f5a800 !important; }
+.footer-bottom-links a:hover { color: #ffffff !important; }
+.footer-socials a { color: #f5a800 !important; border-color: #f5a800 !important; }
+.footer-socials a:hover { color: #ffffff !important; background: #cc0000 !important; border-color: #cc0000 !important; }
+
+/* ===== FOOTER TEXT COLOR UPDATE ===== */
+.footer-brand p { color: #e8e8e8 !important; }
+.footer-col ul a { color: #e8e8e8 !important; }
+.footer-col ul a:hover { color: #f5a800 !important; }
+.footer-bottom p { color: #e8e8e8 !important; }
+.footer-bottom-links a { color: #e8e8e8 !important; }
+.footer-bottom-links a:hover { color: #f5a800 !important; }
+
+/* ===== COPYRIGHT TEXT AMD COLORS ===== */
+.footer-brand p { 
+    background: linear-gradient(135deg, #cc0000, #f5a800) !important;
+    -webkit-background-clip: text !important;
+    -webkit-text-fill-color: transparent !important;
+    background-clip: text !important;
+}
+
+/* ===== COPYRIGHT LINE AMD COLORS ===== */
+.footer-bottom p { 
+    background: linear-gradient(135deg, #cc0000, #f5a800) !important;
+    -webkit-background-clip: text !important;
+    -webkit-text-fill-color: transparent !important;
+    background-clip: text !important;
+}
+
+/* ===== FOOTER BRAND TEXT FIX ===== */
+.footer-brand p { 
+    background: none !important;
+    -webkit-background-clip: unset !important;
+    -webkit-text-fill-color: #e8e8e8 !important;
+    background-clip: unset !important;
+    color: #e8e8e8 !important;
+}
+
+/* ===== FOOTER BRAND TEXT GRADIENT ===== */
+.footer-brand p { 
+    background: linear-gradient(135deg, #cc0000, #f5a800) !important;
+    -webkit-background-clip: text !important;
+    -webkit-text-fill-color: transparent !important;
+    background-clip: text !important;
+    font-weight: 600 !important;
+}
+
+/* ===== FOOTER LINKS GRADIENT ===== */
+.footer-col ul a { 
+    background: linear-gradient(135deg, #cc0000, #f5a800) !important;
+    -webkit-background-clip: text !important;
+    -webkit-text-fill-color: transparent !important;
+    background-clip: text !important;
+    font-weight: 600 !important;
+}
+.footer-col ul a:hover { 
+    background: linear-gradient(135deg, #f5a800, #ffcc44) !important;
+    -webkit-background-clip: text !important;
+    -webkit-text-fill-color: transparent !important;
+    background-clip: text !important;
+}
