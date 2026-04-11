@@ -7,25 +7,19 @@ use Inertia\Middleware;
 
 class HandleInertiaRequests extends Middleware
 {
-    /**
-     * The root template that is loaded on the first page visit.
-     */
-    protected $rootView = 'app';
+    public function rootView(Request $request): string
+    {
+        if ($request->is('admin*')) {
+            return 'admin';
+        }
+        return 'app';
+    }
 
-    /**
-     * Determine the current asset version.
-     */
     public function version(Request $request): ?string
     {
         return parent::version($request);
     }
 
-    /**
-     * Define the props that are shared by default.
-     * These are available in all React pages as `usePage().props`
-     *
-     * @return array<string, mixed>
-     */
     public function share(Request $request): array
     {
         return [
