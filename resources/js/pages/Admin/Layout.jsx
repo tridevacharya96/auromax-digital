@@ -12,42 +12,43 @@ export default function AdminLayout({ children, admin, active }) {
     const logout = () => router.post('/admin/logout');
     const nav = (path) => router.visit(path);
 
-    const navItems = [
-        { key:'dashboard', icon:'fa-tachometer-alt', label:'Dashboard', path:'/admin' },
-        { key:'analytics', icon:'fa-chart-line', label:'Analytics', path:'/admin' },
-    ];
-    const commerce = [
-        { key:'products', icon:'fa-box', label:'Products', path:'/admin/products' },
-        { key:'orders', icon:'fa-shopping-cart', label:'Orders', path:'/admin/orders' },
-        { key:'deliveries', icon:'fa-truck', label:'Deliveries', path:'/admin/orders' },
-        { key:'payments', icon:'fa-credit-card', label:'Payments', path:'/admin/orders' },
-        { key:'customers', icon:'fa-users', label:'Customers', path:'/admin/customers' },
-    ];
-    const content = [
-        { key:'cms', icon:'fa-edit', label:'CMS Manager', path:'/admin/cms' },
-        { key:'media', icon:'fa-image', label:'Media', path:'/admin' },
-    ];
-    const system = [
-        { key:'settings', icon:'fa-cog', label:'Settings', path:'/admin/settings' },
+    const sections = [
+        { title: 'MAIN', items: [
+            { key:'dashboard', icon:'fa-tachometer-alt', label:'Dashboard', path:'/admin' },
+            { key:'analytics', icon:'fa-chart-line', label:'Analytics', path:'/admin' },
+        ]},
+        { title: 'COMMERCE', items: [
+            { key:'products', icon:'fa-box', label:'Products', path:'/admin/products' },
+            { key:'orders', icon:'fa-shopping-cart', label:'Orders', path:'/admin/orders' },
+            { key:'deliveries', icon:'fa-truck', label:'Deliveries', path:'/admin/orders' },
+            { key:'payments', icon:'fa-credit-card', label:'Payments', path:'/admin/payments' },
+            { key:'customers', icon:'fa-users', label:'Customers', path:'/admin/customers' },
+        ]},
+        { title: 'CONTENT', items: [
+            { key:'videos', icon:'fa-play-circle', label:'Podcast Videos', path:'/admin/videos' },
+            { key:'celebrities', icon:'fa-star', label:'Celebrity Guests', path:'/admin/celebrities' },
+            { key:'cms', icon:'fa-edit', label:'CMS Manager', path:'/admin/cms' },
+            { key:'media', icon:'fa-image', label:'Media', path:'/admin' },
+        ]},
+        { title: 'SYSTEM', items: [
+            { key:'settings', icon:'fa-cog', label:'Settings', path:'/admin/settings' },
+        ]},
     ];
 
     return (
         <div style={{ display:'flex', minHeight:'100vh', background:'#0a0a0a', fontFamily:"'Segoe UI',system-ui,sans-serif" }}>
-            {/* Sidebar */}
             <div style={{ width:'260px', background:'#111', borderRight:'1px solid rgba(245,168,0,0.15)', display:'flex', flexDirection:'column', position:'fixed', top:0, left:0, bottom:0, zIndex:100 }}>
                 <div style={{ padding:'1.5rem', borderBottom:'1px solid rgba(245,168,0,0.15)', textAlign:'center' }}>
                     <img src="/images/amd-logo.png" alt="AMD" style={{ height:'50px', width:'auto' }} />
                     <div style={{ color:'#f5a800', fontSize:'0.7rem', fontWeight:700, letterSpacing:'2px', marginTop:'0.5rem' }}>ADMIN PANEL</div>
                 </div>
                 <nav style={{ flex:1, padding:'1rem 0', overflowY:'auto' }}>
-                    <div style={{ color:'#333', fontSize:'0.7rem', fontWeight:700, letterSpacing:'1px', padding:'0.5rem 1.5rem', marginBottom:'0.25rem' }}>MAIN</div>
-                    {navItems.map(i => <NavItem key={i.key} icon={i.icon} label={i.label} active={active===i.key} onClick={() => nav(i.path)} />)}
-                    <div style={{ color:'#333', fontSize:'0.7rem', fontWeight:700, letterSpacing:'1px', padding:'1rem 1.5rem 0.25rem' }}>COMMERCE</div>
-                    {commerce.map(i => <NavItem key={i.key} icon={i.icon} label={i.label} active={active===i.key} onClick={() => nav(i.path)} />)}
-                    <div style={{ color:'#333', fontSize:'0.7rem', fontWeight:700, letterSpacing:'1px', padding:'1rem 1.5rem 0.25rem' }}>CONTENT</div>
-                    {content.map(i => <NavItem key={i.key} icon={i.icon} label={i.label} active={active===i.key} onClick={() => nav(i.path)} />)}
-                    <div style={{ color:'#333', fontSize:'0.7rem', fontWeight:700, letterSpacing:'1px', padding:'1rem 1.5rem 0.25rem' }}>SYSTEM</div>
-                    {system.map(i => <NavItem key={i.key} icon={i.icon} label={i.label} active={active===i.key} onClick={() => nav(i.path)} />)}
+                    {sections.map(section => (
+                        <div key={section.title}>
+                            <div style={{ color:'#333', fontSize:'0.7rem', fontWeight:700, letterSpacing:'1px', padding:'1rem 1.5rem 0.25rem' }}>{section.title}</div>
+                            {section.items.map(i => <NavItem key={i.key} icon={i.icon} label={i.label} active={active===i.key} onClick={() => nav(i.path)} />)}
+                        </div>
+                    ))}
                 </nav>
                 <div style={{ padding:'1rem 1.5rem', borderTop:'1px solid rgba(245,168,0,0.15)', display:'flex', alignItems:'center', gap:'0.75rem' }}>
                     <div style={{ width:'38px', height:'38px', borderRadius:'50%', background:'linear-gradient(135deg,#cc0000,#f5a800)', display:'flex', alignItems:'center', justifyContent:'center', color:'#fff', fontWeight:700, fontSize:'1rem', flexShrink:0 }}>
@@ -63,7 +64,6 @@ export default function AdminLayout({ children, admin, active }) {
                 </div>
             </div>
 
-            {/* Main */}
             <div style={{ marginLeft:'260px', flex:1, display:'flex', flexDirection:'column' }}>
                 <div style={{ background:'#111', borderBottom:'1px solid rgba(245,168,0,0.15)', padding:'1rem 2rem', display:'flex', alignItems:'center', justifyContent:'space-between', position:'sticky', top:0, zIndex:99 }}>
                     <div style={{ color:'#666', fontSize:'0.8rem' }}>
