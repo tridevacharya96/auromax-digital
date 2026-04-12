@@ -1,7 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
 
-const TYPING_WORDS = ['Converge.', 'Connect.', 'Inspire.', 'Innovate.', 'Transform.'];
-
 function useCountUp(target, duration = 2000, start = false) {
     const [value, setValue] = useState(0);
     useEffect(() => {
@@ -21,7 +19,7 @@ function useCountUp(target, duration = 2000, start = false) {
 function StatItem({ target, label }) {
     const ref = useRef(null);
     const [visible, setVisible] = useState(false);
-    const value = useCountUp(target, 2000, visible);
+    const value = useCountUp(parseInt(target) || 0, 2000, visible);
     useEffect(() => {
         const observer = new IntersectionObserver(
             ([entry]) => { if (entry.isIntersecting) setVisible(true); },
@@ -38,22 +36,26 @@ function StatItem({ target, label }) {
     );
 }
 
-export default function Hero() {
-    const [typedWord, setTypedWord] = useState('Converge.');
+export default function Hero({ cms }) {
+    const typingWords = cms?.typing_words
+        ? cms.typing_words.split(',')
+        : ['Converge.', 'Connect.', 'Inspire.', 'Innovate.', 'Transform.'];
+
+    const [typedWord, setTypedWord] = useState(typingWords[0]);
     const wordRef = useRef(0);
-    const charRef = useRef(9);
+    const charRef = useRef(typingWords[0]?.length || 0);
     const deletingRef = useRef(false);
     const timerRef = useRef(null);
 
     useEffect(() => {
         const type = () => {
-            const word = TYPING_WORDS[wordRef.current];
+            const word = typingWords[wordRef.current];
             if (deletingRef.current) {
                 charRef.current--;
                 setTypedWord(word.substring(0, charRef.current));
                 if (charRef.current === 0) {
                     deletingRef.current = false;
-                    wordRef.current = (wordRef.current + 1) % TYPING_WORDS.length;
+                    wordRef.current = (wordRef.current + 1) % typingWords.length;
                     timerRef.current = setTimeout(type, 400); return;
                 }
                 timerRef.current = setTimeout(type, 60);
@@ -80,30 +82,28 @@ export default function Hero() {
             <div className="hero-content">
                 <div className="hero-badge">
                     <span className="dot" />
-                    Where Business Meets Innovation
+                    {cms?.badge || 'Where Business Meets Innovation'}
                 </div>
-                <h1 style={{ color: '#b85c00', fontWeight: 900 }}>
-                    Where Business, Entertainment &amp; Technology{' '}
+                <h1 style={{ color:'#b85c00', fontWeight:900 }}>
+                    {cms?.heading || 'Where Business, Entertainment & Technology'}{' '}
                     <span className="gradient-text">{typedWord}</span>
                 </h1>
-                <p style={{ color: '#8a4a00', fontSize: '1.15rem', maxWidth: '780px', margin: '0 auto 2.5rem', lineHeight: '1.8' }}>
-                    Auromax Digital blends <strong style={{ color: '#cc4400' }}>commerce, creativity, and technology</strong> into
-                    one powerful platform — offering digital and physical products, celebrity-driven experiences,
-                    and custom web solutions that help brands and audiences connect like never before.
+                <p style={{ color:'#8a4a00', fontSize:'1.15rem', maxWidth:'780px', margin:'0 auto 2.5rem', lineHeight:'1.8' }}>
+                    {cms?.description || 'Auromax Digital blends commerce, creativity, and technology into one powerful platform.'}
                 </p>
                 <div className="hero-buttons">
                     <button className="btn btn-primary" onClick={() => scrollTo('features')}>
-                        <i className="fas fa-rocket" /> Explore Features
+                        <i className="fas fa-rocket" /> {cms?.btn_primary || 'Explore Features'}
                     </button>
                     <button className="btn btn-outline" onClick={() => scrollTo('contact')}>
-                        <i className="fas fa-play" /> Watch Demo
+                        <i className="fas fa-play" /> {cms?.btn_secondary || 'Watch Demo'}
                     </button>
                 </div>
                 <div className="stats">
-                    <StatItem target={10} label="K+ Users" />
-                    <StatItem target={98} label="% Satisfaction" />
-                    <StatItem target={50} label="+ Components" />
-                    <StatItem target={24} label="/7 Support" />
+                    <StatItem target={cms?.stat1_value || '10'} label={cms?.stat1_label || 'K+ Users'} />
+                    <StatItem target={cms?.stat2_value || '98'} label={cms?.stat2_label || '% Satisfaction'} />
+                    <StatItem target={cms?.stat3_value || '50'} label={cms?.stat3_label || '+ Components'} />
+                    <StatItem target={cms?.stat4_value || '24'} label={cms?.stat4_label || '/7 Support'} />
                 </div>
             </div>
         </section>
