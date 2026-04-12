@@ -10,6 +10,7 @@ use App\Http\Controllers\Admin\CustomerController;
 use App\Http\Controllers\Admin\PaymentController;
 use App\Http\Controllers\Admin\SettingController;
 use App\Http\Controllers\Admin\VideoController;
+use App\Http\Controllers\Admin\DeliveryController;
 use App\Http\Controllers\Admin\CelebrityController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Auth\LoginController;
@@ -47,6 +48,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::resource('customers', CustomerController::class);
         Route::resource('videos', VideoController::class);
         Route::resource('celebrities', CelebrityController::class);
+        Route::resource('deliveries', DeliveryController::class)->only(['index','update']);
         Route::get('/payments', [PaymentController::class, 'index'])->name('payments.index');
         Route::get('/cms', [CmsController::class, 'index'])->name('cms.index');
         Route::put('/cms', [CmsController::class, 'update'])->name('cms.update');

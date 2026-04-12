@@ -20,7 +20,7 @@ export default function AdminLayout({ children, admin, active }) {
         { title: 'COMMERCE', items: [
             { key:'products', icon:'fa-box', label:'Products', path:'/admin/products' },
             { key:'orders', icon:'fa-shopping-cart', label:'Orders', path:'/admin/orders' },
-            { key:'deliveries', icon:'fa-truck', label:'Deliveries', path:'/admin/orders' },
+            { key:'deliveries', icon:'fa-truck', label:'Deliveries', path:'/admin/deliveries' },
             { key:'payments', icon:'fa-credit-card', label:'Payments', path:'/admin/payments' },
             { key:'customers', icon:'fa-users', label:'Customers', path:'/admin/customers' },
         ]},
