@@ -603,3 +603,29 @@ footer p { color: #f5a800 !important; }
     -webkit-text-fill-color: transparent !important;
     background-clip: text !important;
 }
+
+/* ===== NAVBAR CENTER FIX ===== */
+.navbar {
+    display: grid !important;
+    grid-template-columns: auto 1fr auto !important;
+    align-items: center !important;
+    height: auto !important;
+    min-height: 80px !important;
+    padding: 0.75rem 2rem !important;
+    gap: 1rem !important;
+}
+.nav-links {
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    gap: 1.5rem !important;
+    flex-wrap: nowrap !important;
+}
+.nav-links a { font-size: 0.83rem !important; }
+.navbar > div:last-child { display: flex; align-items: center; gap: 0.5rem; justify-content: flex-end; }
+
+@media (max-width: 1100px) {
+    .navbar { grid-template-columns: auto auto !important; }
+    .nav-links { display: none !important; }
+    .hamburger { display: flex !important; }
+}
