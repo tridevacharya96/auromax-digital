@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import Navbar from '@/components/Navbar';
 import ParticleCanvas from '@/components/ParticleCanvas';
 import Hero from '@/components/Hero';
@@ -12,14 +13,22 @@ import Contact from '@/components/Contact';
 import Footer from '@/components/Footer';
 import { Loader, ProgressBar, ScrollToTop } from '@/components/Utils';
 
-export default function Home({ cms, bestsellers, products, videos, celebrities }) {
+export default function Home({ cms, theme, bestsellers, products, videos, celebrities, auth }) {
+    useEffect(() => {
+        if (!theme) return;
+        const root = document.documentElement;
+        if (theme.theme_primary)   root.style.setProperty('--primary',   theme.theme_primary);
+        if (theme.theme_secondary) root.style.setProperty('--secondary', theme.theme_secondary);
+        if (theme.theme_accent)    root.style.setProperty('--accent',    theme.theme_accent);
+    }, [theme]);
+
     return (
         <>
             <Loader />
             <ProgressBar />
             <div className="bg-animation" />
             <ParticleCanvas />
-            <Navbar />
+            <Navbar auth={auth} />
             <main>
                 <Hero cms={cms?.hero} />
                 <Bestsellers products={bestsellers} />

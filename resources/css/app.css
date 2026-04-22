@@ -629,3 +629,17 @@ footer p { color: #f5a800 !important; }
     .nav-links { display: none !important; }
     .hamburger { display: flex !important; }
 }
+
+/* ===== ADMIN CENTURY GOTHIC FONT ===== */
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800;900&display=swap');
+
+.navbar[id="navbar"] ~ * { font-family: 'Century Gothic', 'Nunito', sans-serif !important; }
+
+/* Apply Century Gothic to all admin pages */
+body:has([class*="admin"]),
+[data-page*="Admin"] body,
+[data-page*="Admin"] * {
+    font-family: 'Century Gothic', 'CenturyGothic', 'AppleGothic', 'Nunito', sans-serif !important;
+}
+
+/* ===== ADMIN CENTURY GOTHIC ===== */

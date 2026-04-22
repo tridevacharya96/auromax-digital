@@ -3,6 +3,7 @@
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\Admin\AuthController as AdminAuthController;
 use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\AnalyticsController;
 use App\Http\Controllers\Admin\CmsController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\OrderController;
@@ -43,6 +44,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::middleware('admin.auth')->group(function () {
         Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
         Route::get('/dashboard', [DashboardController::class, 'index']);
+        Route::get('/analytics', [AnalyticsController::class, 'index'])->name('analytics');
         Route::resource('products', ProductController::class);
         Route::resource('orders', OrderController::class);
         Route::resource('customers', CustomerController::class);
@@ -52,6 +54,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::get('/payments', [PaymentController::class, 'index'])->name('payments.index');
         Route::get('/cms', [CmsController::class, 'index'])->name('cms.index');
         Route::put('/cms', [CmsController::class, 'update'])->name('cms.update');
+        Route::get('/theme', [SettingController::class, 'theme'])->name('theme');
         Route::get('/settings', [SettingController::class, 'index'])->name('settings.index');
         Route::put('/settings', [SettingController::class, 'update'])->name('settings.update');
     });

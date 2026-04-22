@@ -9,9 +9,7 @@ class HandleInertiaRequests extends Middleware
 {
     public function rootView(Request $request): string
     {
-        if ($request->is('admin*')) {
-            return 'admin';
-        }
+        if ($request->is('admin*')) return 'admin';
         return 'app';
     }
 
@@ -24,10 +22,8 @@ class HandleInertiaRequests extends Middleware
     {
         return [
             ...parent::share($request),
-            'app' => [
-                'name' => config('app.name'),
-                'url'  => config('app.url'),
-            ],
+            'app'  => ['name' => config('app.name'), 'url' => config('app.url')],
+            'auth' => ['user' => $request->user()],
         ];
     }
 }

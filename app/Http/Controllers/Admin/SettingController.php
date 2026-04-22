@@ -13,8 +13,16 @@ class SettingController extends Controller
     public function index()
     {
         $settings = Setting::all()->pluck('value', 'key');
-
         return Inertia::render('Admin/Settings', [
+            'settings' => $settings,
+            'admin'    => Auth::guard('admin')->user(),
+        ]);
+    }
+
+    public function theme()
+    {
+        $settings = Setting::all()->pluck('value', 'key');
+        return Inertia::render('Admin/Theme', [
             'settings' => $settings,
             'admin'    => Auth::guard('admin')->user(),
         ]);
@@ -22,17 +30,11 @@ class SettingController extends Controller
 
     public function update(Request $request)
     {
-        $data = $request->validate([
-            'settings' => 'required|array',
-        ]);
-
+        $data = $request->validate(['settings' => 'required|array']);
         foreach ($data['settings'] as $key => $value) {
-            Setting::updateOrCreate(
-                ['key' => $key],
-                ['value' => $value]
-            );
+            $group = str_starts_with($key, 'theme_') || str_starts_with($key, 'admin_') ? 'theme' : 'general';
+            Setting::updateOrCreate(['key' => $key], ['value' => $value, 'group' => $group]);
         }
-
         return back()->with('success', 'Settings saved successfully!');
     }
 }

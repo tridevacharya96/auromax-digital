@@ -15,7 +15,7 @@ export default function AdminLayout({ children, admin, active }) {
     const sections = [
         { title: 'MAIN', items: [
             { key:'dashboard', icon:'fa-tachometer-alt', label:'Dashboard', path:'/admin' },
-            { key:'analytics', icon:'fa-chart-line', label:'Analytics', path:'/admin' },
+            { key:'analytics', icon:'fa-chart-line', label:'Analytics', path:'/admin/analytics' },
         ]},
         { title: 'COMMERCE', items: [
             { key:'products', icon:'fa-box', label:'Products', path:'/admin/products' },
@@ -31,12 +31,13 @@ export default function AdminLayout({ children, admin, active }) {
             { key:'media', icon:'fa-image', label:'Media', path:'/admin' },
         ]},
         { title: 'SYSTEM', items: [
+            { key:'theme', icon:'fa-paint-brush', label:'Theme Manager', path:'/admin/theme' },
             { key:'settings', icon:'fa-cog', label:'Settings', path:'/admin/settings' },
         ]},
     ];
 
     return (
-        <div style={{ display:'flex', minHeight:'100vh', background:'#0a0a0a', fontFamily:"'Segoe UI',system-ui,sans-serif" }}>
+        <div style={{ display:'flex', minHeight:'100vh', background:'#0a0a0a', fontFamily:"'Century Gothic','CenturyGothic','AppleGothic','Trebuchet MS',sans-serif" }}>
             <div style={{ width:'260px', background:'#111', borderRight:'1px solid rgba(245,168,0,0.15)', display:'flex', flexDirection:'column', position:'fixed', top:0, left:0, bottom:0, zIndex:100 }}>
                 <div style={{ padding:'1.5rem', borderBottom:'1px solid rgba(245,168,0,0.15)', textAlign:'center' }}>
                     <img src="/images/amd-logo.png" alt="AMD" style={{ height:'50px', width:'auto' }} />

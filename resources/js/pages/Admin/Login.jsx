@@ -12,7 +12,7 @@ export default function Login({ errors }) {
     };
 
     return (
-        <div style={{ minHeight:'100vh', background:'#ffffff', display:'flex', alignItems:'center', justifyContent:'center', fontFamily:"'Segoe UI',system-ui,sans-serif", position:'relative', overflow:'hidden' }}>
+        <div style={{ minHeight:'100vh', background:'#ffffff', display:'flex', alignItems:'center', justifyContent:'center', fontFamily:"'Century Gothic','CenturyGothic','AppleGothic','Trebuchet MS',sans-serif", position:'relative', overflow:'hidden' }}>
             {/* Background glow */}
             <div style={{ position:'absolute', width:'600px', height:'600px', background:'radial-gradient(circle,rgba(245,168,0,0.06) 0%,transparent 70%)', top:'-200px', right:'-200px', borderRadius:'50%' }} />
             <div style={{ position:'absolute', width:'500px', height:'500px', background:'radial-gradient(circle,rgba(204,0,0,0.04) 0%,transparent 70%)', bottom:'-150px', left:'-150px', borderRadius:'50%' }} />
