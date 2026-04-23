@@ -28,6 +28,13 @@ Route::get('/login', [LoginController::class, 'show'])->name('login');
 Route::post('/login', [LoginController::class, 'login'])->name('login.post');
 Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 
+// Razorpay Payment
+Route::middleware('user.auth')->group(function () {
+    Route::post('/payment/razorpay/create-order', [App\Http\Controllers\RazorpayController::class, 'createOrder'])->name('razorpay.create');
+    Route::post('/payment/razorpay/verify',        [App\Http\Controllers\RazorpayController::class, 'verifyPayment'])->name('razorpay.verify');
+});
+Route::post('/payment/razorpay/webhook', [App\Http\Controllers\RazorpayController::class, 'webhook'])->name('razorpay.webhook');
+
 // User Profile (protected)
 Route::middleware('user.auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'index'])->name('profile');
@@ -59,3 +66,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::put('/settings', [SettingController::class, 'update'])->name('settings.update');
     });
 });
+
+
+
+

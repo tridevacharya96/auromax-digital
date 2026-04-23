@@ -36,7 +36,7 @@ export default function Home({ cms, theme, bestsellers, products, videos, celebr
                 <Podcasts videos={videos} />
                 <Celebrities celebrities={celebrities} />
                 <Features cms={cms?.features} />
-                <Pricing cms={cms?.pricing} />
+                <Pricing cms={cms?.pricing} auth={auth} />
                 <Team cms={cms?.team} />
                 <Contact cms={cms?.contact} />
             </main>
