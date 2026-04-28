@@ -17,10 +17,10 @@ class HomeController extends Controller
         $cms   = CmsContent::all()->groupBy('section')->map(fn($items) => $items->pluck('value', 'key'));
         $theme = Setting::where('group', 'theme')->get()->pluck('value', 'key');
 
-        $bestsellers = Product::where('is_active', true)->where('is_featured', true)->limit(6)->get();
+        $bestsellers = Product::where('is_active', true)->where('is_featured', true)->limit(12)->get();
         $products    = Product::where('is_active', true)->latest()->limit(8)->get();
 
-        $videos = Video::where('is_active', true)->orderBy('order')->orderBy('created_at', 'desc')->limit(6)->get()->map(fn($v) => [
+        $videos = Video::where('is_active', true)->orderBy('order')->orderBy('created_at', 'desc')->limit(12)->get()->map(fn($v) => [
             'id' => $v->id, 'title' => $v->title, 'description' => $v->description,
             'youtube_id' => $v->youtube_id, 'youtube_url' => $v->youtube_url,
             'thumbnail' => $v->thumbnail_url, 'category' => $v->category,
