@@ -43,9 +43,13 @@ class VideoController extends Controller
             return back()->withErrors(['youtube_url' => 'Invalid YouTube URL.']);
         }
 
-        // Auto-detect shorts if no category given
+        // Auto-detect category if not manually set
         if (empty($data['category'])) {
-            $data['category'] = $this->detectCategory($data['youtube_id']);
+            $data['category'] = $this->detectCategory(
+                $data['youtube_id'],
+                $data['title'] ?? '',
+                $data['description'] ?? ''
+            );
         }
 
         Video::create($data);
@@ -74,30 +78,37 @@ class VideoController extends Controller
         return back()->with('success', 'Video deleted!');
     }
 
-    // Auto-detect if a video is a Short based on duration
-    private function detectCategory(string $videoId): string
+    // Detect category using hashtags + duration
+    private function detectCategory(string $videoId, string $title = '', string $description = ''): string
     {
+        // Check hashtags first — most reliable signal
+        $text = strtolower($title . ' ' . $description);
+        if (str_contains($text, '#shorts') || str_contains($text, '#short')) {
+            return 'shorts';
+        }
+
+        // Fallback: check duration via API
         try {
-            $apiKey  = config('services.youtube.api_key');
             $res = Http::get('https://www.googleapis.com/youtube/v3/videos', [
-                'key'  => $apiKey,
+                'key'  => config('services.youtube.api_key'),
                 'id'   => $videoId,
                 'part' => 'contentDetails',
             ]);
 
             if ($res->successful()) {
-                $duration = $res->json('items.0.contentDetails.duration'); // e.g. PT58S or PT12M30S
-                $seconds  = $this->parseDuration($duration);
-                return $seconds <= 60 ? 'shorts' : 'podcast';
+                $seconds = $this->parseDuration(
+                    $res->json('items.0.contentDetails.duration') ?? 'PT0S'
+                );
+                return $seconds <= 180 ? 'shorts' : 'podcast';
             }
         } catch (\Exception $e) {
             Log::error('Category detection failed: ' . $e->getMessage());
         }
 
-        return 'podcast'; // default fallback
+        return 'podcast';
     }
 
-    // Convert ISO 8601 duration (PT1M30S) to seconds
+    // Convert ISO 8601 duration (e.g. PT1M30S) to total seconds
     private function parseDuration(string $duration): int
     {
         preg_match('/PT(?:(\d+)H)?(?:(\d+)M)?(?:(\d+)S)?/', $duration, $m);
@@ -117,7 +128,7 @@ class VideoController extends Controller
         }
 
         try {
-            // Step 1: Get latest videos from channel
+            // Step 1: Fetch latest 50 videos from channel
             $searchRes = Http::get('https://www.googleapis.com/youtube/v3/search', [
                 'key'        => $apiKey,
                 'channelId'  => $channelId,
@@ -137,8 +148,11 @@ class VideoController extends Controller
                 return back()->withErrors(['sync' => 'No videos found on this channel.']);
             }
 
-            // Step 2: Get durations for all video IDs in one API call
-            $videoIds = collect($items)->pluck('id.videoId')->filter()->implode(',');
+            // Step 2: Fetch durations for all videos in one API call
+            $videoIds = collect($items)
+                ->pluck('id.videoId')
+                ->filter()
+                ->implode(',');
 
             $detailsRes = Http::get('https://www.googleapis.com/youtube/v3/videos', [
                 'key'  => $apiKey,
@@ -146,7 +160,7 @@ class VideoController extends Controller
                 'part' => 'contentDetails',
             ]);
 
-            // Build a map of videoId => duration in seconds
+            // Build videoId => seconds map
             $durations = [];
             if ($detailsRes->successful()) {
                 foreach ($detailsRes->json('items', []) as $detail) {
@@ -163,19 +177,26 @@ class VideoController extends Controller
                 $videoId = $item['id']['videoId'] ?? null;
                 if (!$videoId) continue;
 
-                // Skip duplicates
+                // Skip already existing videos
                 if (Video::where('youtube_id', $videoId)->exists()) {
                     $skipped++;
                     continue;
                 }
 
-                $snippet  = $item['snippet'];
-                $seconds  = $durations[$videoId] ?? 999;
-                $category = $seconds <= 60 ? 'shorts' : 'podcast';
+                $snippet     = $item['snippet'];
+                $title       = $snippet['title'] ?? '';
+                $description = $snippet['description'] ?? '';
+                $seconds     = $durations[$videoId] ?? 999;
+
+                // Detect by hashtag first, then by duration (≤3 min = shorts)
+                $text     = strtolower($title . ' ' . $description);
+                $category = (str_contains($text, '#shorts') || str_contains($text, '#short') || $seconds <= 180)
+                    ? 'shorts'
+                    : 'podcast';
 
                 Video::create([
-                    'title'                => $snippet['title'],
-                    'description'          => $snippet['description'] ?? '',
+                    'title'                => $title,
+                    'description'          => $description,
                     'youtube_url'          => "https://www.youtube.com/watch?v={$videoId}",
                     'youtube_id'           => $videoId,
                     'category'             => $category,
@@ -184,10 +205,11 @@ class VideoController extends Controller
                     'source'               => 'youtube',
                     'youtube_published_at' => $snippet['publishedAt'] ?? null,
                 ]);
+
                 $added++;
             }
 
-            return back()->with('success', "Sync complete! Added {$added} new videos ({$skipped} already existed). Shorts auto-detected!");
+            return back()->with('success', "Sync complete! Added {$added} new videos ({$skipped} already existed). Shorts auto-detected! ⚡");
 
         } catch (\Exception $e) {
             Log::error('YouTube sync failed: ' . $e->getMessage());
