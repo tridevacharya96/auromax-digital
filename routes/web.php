@@ -56,6 +56,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::resource('orders', OrderController::class);
         Route::resource('customers', CustomerController::class);
         Route::resource('videos', VideoController::class);
+        Route::post('/videos/sync-youtube', [VideoController::class, 'syncYoutube'])->name('videos.sync');
         Route::resource('celebrities', CelebrityController::class);
         Route::resource('deliveries', DeliveryController::class)->only(['index','update']);
         Route::get('/payments', [PaymentController::class, 'index'])->name('payments.index');
