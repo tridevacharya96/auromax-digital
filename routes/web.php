@@ -55,10 +55,10 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::resource('products', ProductController::class);
         Route::resource('orders', OrderController::class);
         Route::resource('customers', CustomerController::class);
-        Route::resource('videos', VideoController::class);
         Route::post('/videos/sync-youtube', [VideoController::class, 'syncYoutube'])->name('videos.sync');
+        Route::resource('videos', VideoController::class);
         Route::resource('celebrities', CelebrityController::class);
-        Route::resource('deliveries', DeliveryController::class)->only(['index','update']);
+        Route::resource('deliveries', DeliveryController::class)->only(['index', 'update']);
         Route::get('/payments', [PaymentController::class, 'index'])->name('payments.index');
         Route::get('/cms', [CmsController::class, 'index'])->name('cms.index');
         Route::put('/cms', [CmsController::class, 'update'])->name('cms.update');
@@ -67,7 +67,3 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::put('/settings', [SettingController::class, 'update'])->name('settings.update');
     });
 });
-
-
-
-

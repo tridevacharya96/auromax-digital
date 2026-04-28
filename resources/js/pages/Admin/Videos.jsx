@@ -120,11 +120,12 @@ export default function Videos({ videos, admin, youtube_config }) {
                                     <label style={{ color: '#f5a800', fontSize: '0.8rem', fontWeight: 600, display: 'block', marginBottom: '0.4rem' }}>Category</label>
                                     <select style={inp} value={form.category} onChange={e => setForm(f => ({ ...f, category: e.target.value }))}>
                                         <option value="">Select Category</option>
-                                        <option value="podcast">Podcast</option>
-                                        <option value="interview">Interview</option>
-                                        <option value="celebrity">Celebrity</option>
-                                        <option value="business">Business</option>
-                                        <option value="entertainment">Entertainment</option>
+                                            <option value="podcast">🎙️ Podcast</option>
+                                            <option value="shorts">⚡ Shorts</option>
+                                            <option value="interview">🎤 Interview</option>
+                                            <option value="celebrity">⭐ Celebrity</option>
+                                            <option value="business">💼 Business</option>
+                                            <option value="entertainment">🎬 Entertainment</option>
                                     </select>
                                 </div>
                                 <div>

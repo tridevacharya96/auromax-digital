@@ -43,6 +43,11 @@ class VideoController extends Controller
             return back()->withErrors(['youtube_url' => 'Invalid YouTube URL.']);
         }
 
+        // Auto-detect shorts if no category given
+        if (empty($data['category'])) {
+            $data['category'] = $this->detectCategory($data['youtube_id']);
+        }
+
         Video::create($data);
         return back()->with('success', 'Video added successfully!');
     }
@@ -69,6 +74,38 @@ class VideoController extends Controller
         return back()->with('success', 'Video deleted!');
     }
 
+    // Auto-detect if a video is a Short based on duration
+    private function detectCategory(string $videoId): string
+    {
+        try {
+            $apiKey  = config('services.youtube.api_key');
+            $res = Http::get('https://www.googleapis.com/youtube/v3/videos', [
+                'key'  => $apiKey,
+                'id'   => $videoId,
+                'part' => 'contentDetails',
+            ]);
+
+            if ($res->successful()) {
+                $duration = $res->json('items.0.contentDetails.duration'); // e.g. PT58S or PT12M30S
+                $seconds  = $this->parseDuration($duration);
+                return $seconds <= 60 ? 'shorts' : 'podcast';
+            }
+        } catch (\Exception $e) {
+            Log::error('Category detection failed: ' . $e->getMessage());
+        }
+
+        return 'podcast'; // default fallback
+    }
+
+    // Convert ISO 8601 duration (PT1M30S) to seconds
+    private function parseDuration(string $duration): int
+    {
+        preg_match('/PT(?:(\d+)H)?(?:(\d+)M)?(?:(\d+)S)?/', $duration, $m);
+        return (int)($m[1] ?? 0) * 3600
+             + (int)($m[2] ?? 0) * 60
+             + (int)($m[3] ?? 0);
+    }
+
     // Sync latest videos from YouTube channel
     public function syncYoutube()
     {
@@ -80,20 +117,45 @@ class VideoController extends Controller
         }
 
         try {
-            $response = Http::get('https://www.googleapis.com/youtube/v3/search', [
+            // Step 1: Get latest videos from channel
+            $searchRes = Http::get('https://www.googleapis.com/youtube/v3/search', [
                 'key'        => $apiKey,
                 'channelId'  => $channelId,
                 'part'       => 'snippet',
                 'order'      => 'date',
                 'type'       => 'video',
-                'maxResults' => 20,
+                'maxResults' => 50,
             ]);
 
-            if (!$response->successful()) {
-                return back()->withErrors(['sync' => 'YouTube API error: ' . $response->body()]);
+            if (!$searchRes->successful()) {
+                return back()->withErrors(['sync' => 'YouTube API error: ' . $searchRes->body()]);
             }
 
-            $items   = $response->json('items', []);
+            $items = $searchRes->json('items', []);
+
+            if (empty($items)) {
+                return back()->withErrors(['sync' => 'No videos found on this channel.']);
+            }
+
+            // Step 2: Get durations for all video IDs in one API call
+            $videoIds = collect($items)->pluck('id.videoId')->filter()->implode(',');
+
+            $detailsRes = Http::get('https://www.googleapis.com/youtube/v3/videos', [
+                'key'  => $apiKey,
+                'id'   => $videoIds,
+                'part' => 'contentDetails',
+            ]);
+
+            // Build a map of videoId => duration in seconds
+            $durations = [];
+            if ($detailsRes->successful()) {
+                foreach ($detailsRes->json('items', []) as $detail) {
+                    $durations[$detail['id']] = $this->parseDuration(
+                        $detail['contentDetails']['duration'] ?? 'PT0S'
+                    );
+                }
+            }
+
             $added   = 0;
             $skipped = 0;
 
@@ -101,19 +163,22 @@ class VideoController extends Controller
                 $videoId = $item['id']['videoId'] ?? null;
                 if (!$videoId) continue;
 
-                // Skip if already exists
+                // Skip duplicates
                 if (Video::where('youtube_id', $videoId)->exists()) {
                     $skipped++;
                     continue;
                 }
 
-                $snippet = $item['snippet'];
+                $snippet  = $item['snippet'];
+                $seconds  = $durations[$videoId] ?? 999;
+                $category = $seconds <= 60 ? 'shorts' : 'podcast';
+
                 Video::create([
                     'title'                => $snippet['title'],
                     'description'          => $snippet['description'] ?? '',
                     'youtube_url'          => "https://www.youtube.com/watch?v={$videoId}",
                     'youtube_id'           => $videoId,
-                    'category'             => 'podcast',
+                    'category'             => $category,
                     'order'                => 0,
                     'is_active'            => true,
                     'source'               => 'youtube',
@@ -122,7 +187,7 @@ class VideoController extends Controller
                 $added++;
             }
 
-            return back()->with('success', "Sync complete! Added {$added} new videos, skipped {$skipped} existing.");
+            return back()->with('success', "Sync complete! Added {$added} new videos ({$skipped} already existed). Shorts auto-detected!");
 
         } catch (\Exception $e) {
             Log::error('YouTube sync failed: ' . $e->getMessage());
