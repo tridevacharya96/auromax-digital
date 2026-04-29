@@ -11,12 +11,14 @@ use App\Http\Controllers\Admin\CustomerController;
 use App\Http\Controllers\Admin\PaymentController;
 use App\Http\Controllers\Admin\SettingController;
 use App\Http\Controllers\Admin\VideoController;
+use App\Http\Controllers\Admin\TeamController;
 use App\Http\Controllers\Admin\DeliveryController;
 use App\Http\Controllers\Admin\CelebrityController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\ProfileController;
 use Illuminate\Support\Facades\Route;
+
 
 // Home
 Route::get('/', [HomeController::class, 'index'])->name('home');
@@ -57,6 +59,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::resource('customers', CustomerController::class);
         Route::post('/videos/sync-youtube', [VideoController::class, 'syncYoutube'])->name('videos.sync');
         Route::resource('videos', VideoController::class);
+        Route::resource('team', TeamController::class)->except(['show', 'create', 'edit']);
         Route::resource('celebrities', CelebrityController::class);
         Route::resource('deliveries', DeliveryController::class)->only(['index', 'update']);
         Route::get('/payments', [PaymentController::class, 'index'])->name('payments.index');

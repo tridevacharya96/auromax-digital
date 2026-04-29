@@ -55,6 +55,7 @@ export default function AdminLayout({ children, admin, active }) {
             { key: 'celebrities', icon: 'fa-star',        label: 'Celebrity Guests', path: '/admin/celebrities' },
             { key: 'cms',         icon: 'fa-edit',        label: 'CMS Manager',     path: '/admin/cms' },
             { key: 'media',       icon: 'fa-image',       label: 'Media',           path: '/admin' },
+            { key: 'team', icon: 'fa-users', label: 'Team Members', path: '/admin/team' },
         ]},
         { title: 'SYSTEM', items: [
             { key: 'theme',    icon: 'fa-paint-brush', label: 'Theme Manager', path: '/admin/theme' },
