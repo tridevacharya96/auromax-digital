@@ -17,8 +17,8 @@ use App\Http\Controllers\Admin\CelebrityController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\ProfileController;
+use App\Http\Controllers\CelebrityWishController;
 use Illuminate\Support\Facades\Route;
-
 
 // Home
 Route::get('/', [HomeController::class, 'index'])->name('home');
@@ -44,6 +44,10 @@ Route::middleware('user.auth')->group(function () {
     Route::post('/profile/password', [ProfileController::class, 'updatePassword'])->name('profile.password');
 });
 
+// Celebrity Wish Booking
+Route::post('/celebrity-wish/create-order', [CelebrityWishController::class, 'createOrder'])->name('wish.create');
+Route::post('/celebrity-wish/verify',       [CelebrityWishController::class, 'verifyPayment'])->name('wish.verify');
+
 // Admin Routes
 Route::prefix('admin')->name('admin.')->group(function () {
     Route::get('/login', [AdminAuthController::class, 'showLogin'])->name('login');
@@ -55,6 +59,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::get('/dashboard', [DashboardController::class, 'index']);
         Route::get('/analytics', [AnalyticsController::class, 'index'])->name('analytics');
         Route::resource('products', ProductController::class);
+        Route::patch('/products/booking/{booking}', [ProductController::class, 'updateBooking'])->name('products.booking.update');
         Route::resource('orders', OrderController::class);
         Route::resource('customers', CustomerController::class);
         Route::post('/videos/sync-youtube', [VideoController::class, 'syncYoutube'])->name('videos.sync');

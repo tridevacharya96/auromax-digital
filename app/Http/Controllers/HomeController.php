@@ -18,7 +18,21 @@ class HomeController extends Controller
         $theme = Setting::where('group', 'theme')->get()->pluck('value', 'key');
 
         $bestsellers = Product::where('is_active', true)->where('is_featured', true)->limit(12)->get();
-        $products    = Product::where('is_active', true)->latest()->limit(8)->get();
+        $products = Product::where('is_active', true)->latest()->limit(8)->get()->map(fn($p) => [
+            'id'                   => $p->id,
+            'name'                 => $p->name,
+            'description'          => $p->description,
+            'type'                 => $p->type,
+            'price'                => $p->price,
+            'sale_price'           => $p->sale_price,
+            'category'             => $p->category,
+            'is_celebrity_wish'    => $p->is_celebrity_wish,
+            'celebrity_name'       => $p->celebrity_name,
+            'celebrity_photo_url'  => $p->celebrity_photo_url,
+            'delivery_days'        => $p->delivery_days,
+            'sample_videos'        => $p->sample_videos ?? [],
+            'image_url'            => $p->image_url,
+        ]);
 
         $videos = Video::where('is_active', true)->orderBy('order')->orderBy('created_at', 'desc')->limit(12)->get()->map(fn($v) => [
             'id' => $v->id, 'title' => $v->title, 'description' => $v->description,
@@ -32,6 +46,8 @@ class HomeController extends Controller
             'spotify_url' => $c->spotify_url, 'instagram_url' => $c->instagram_url,
             'youtube_url' => $c->youtube_url, 'is_featured' => $c->is_featured,
         ]);
+
+        
 
         $auth = ['user' => auth()->user()];
 

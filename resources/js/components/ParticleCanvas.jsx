@@ -20,11 +20,13 @@ export default function ParticleCanvas() {
                 this.speedX = (Math.random() - 0.5) * 0.4;
                 this.speedY = (Math.random() - 0.5) * 0.4;
                 this.opacity = Math.random() * 0.25 + 0.05;
-                this.color = Math.random() > 0.5 ? '245,168,0' : '204,0,0';
+                // Deep orange palette
+                const colors = ['255,87,34', '255,111,0', '230,74,25', '191,54,12'];
+                this.color = colors[Math.floor(Math.random() * colors.length)];
             }
             update() {
                 this.x += this.speedX; this.y += this.speedY;
-                if (this.x < 0 || this.x > canvas.width) this.speedX *= -1;
+                if (this.x < 0 || this.x > canvas.width)  this.speedX *= -1;
                 if (this.y < 0 || this.y > canvas.height) this.speedY *= -1;
             }
             draw() {
@@ -47,7 +49,7 @@ export default function ParticleCanvas() {
                         ctx.beginPath();
                         ctx.moveTo(particles[i].x, particles[i].y);
                         ctx.lineTo(particles[j].x, particles[j].y);
-                        ctx.strokeStyle = `rgba(245,168,0,${(1 - dist/120) * 0.12})`;
+                        ctx.strokeStyle = `rgba(255,87,34,${(1 - dist/120) * 0.12})`;
                         ctx.lineWidth = 0.5;
                         ctx.stroke();
                     }
