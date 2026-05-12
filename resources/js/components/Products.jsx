@@ -1,6 +1,5 @@
 import { useState, useRef } from 'react';
-import { router } from '@inertiajs/react';
-import AdminLayout from './Layout';
+
 
 const blank = {
     name: '', description: '', type: 'digital', price: '', sale_price: '',
